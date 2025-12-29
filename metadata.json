@@ -1,0 +1,7 @@
+{
+  "name": "Aurelia",
+  "description": "An AI-driven strategic partner for solo entrepreneurs, offering mental clarity, regulatory guidance, and customized business planning.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
