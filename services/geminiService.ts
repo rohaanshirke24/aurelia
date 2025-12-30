@@ -23,11 +23,20 @@ export const sendChatMessage = async (
   images: { data: string; mimeType: string }[] = [],
   context: string = ""
 ): Promise<string> => {
+  if (!apiKey) {
+      return "System Error: API Key is missing. Please check your .env file or Vercel settings.";
+  }
+
   try {
-    const model = "gemini-3-pro-preview";
+    // Switch to Flash for better stability and latency
+    const model = "gemini-3-flash-preview";
     
     // Construct the user message part(s)
-    const userParts: ({ text: string } | ImagePart)[] = [{ text: message }];
+    // Filter out empty text to avoid API errors
+    const userParts: ({ text: string } | ImagePart)[] = [];
+    if (message && message.trim()) {
+        userParts.push({ text: message });
+    }
     
     // Add images if present
     images.forEach(img => {
@@ -38,6 +47,10 @@ export const sendChatMessage = async (
         }
       });
     });
+
+    if (userParts.length === 0) {
+        return "Please provide text or an image.";
+    }
 
     const chat = ai.chats.create({
       model: model,
@@ -72,10 +85,11 @@ export const sendChatMessage = async (
         message: userParts
     });
     
-    return result.text || "I'm having trouble connecting right now. Let's take a breath and try again.";
-  } catch (error) {
+    return result.text || "I received your signal, but the data stream was empty. Please try again.";
+  } catch (error: any) {
     console.error("Chat Error:", error);
-    return "Aurelia is currently offline. Please check your connection.";
+    // Return the actual error message for debugging
+    return `CRITICAL_FAILURE: Connection to Neural Core failed. \n\nReason: ${error.message || "Unknown Network Error"}.\n\nPlease verify your API Key in Vercel settings and check your internet connection.`;
   }
 };
 

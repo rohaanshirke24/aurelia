@@ -317,20 +317,24 @@ const ThinkingPartner: React.FC = () => {
 
     try {
       // Build history with support for images from previous messages
-      const history = messages.map(m => {
-        const parts: any[] = [{ text: m.content }];
-        if (m.image) {
-          parts.push({
-            inlineData: {
-              data: m.image.data,
-              mimeType: m.image.mimeType
+      // CRITICAL: Filter out the 'welcome' message to avoid sending a Model-first history to the API
+      // This often fixes the '400 Bad Request' or connection issues with strict models.
+      const history = messages
+        .filter(m => m.id !== 'welcome')
+        .map(m => {
+            const parts: any[] = [{ text: m.content }];
+            if (m.image) {
+              parts.push({
+                inlineData: {
+                  data: m.image.data,
+                  mimeType: m.image.mimeType
+                }
+              });
             }
-          });
-        }
-        return {
-          role: m.role,
-          parts: parts
-        };
+            return {
+              role: m.role,
+              parts: parts
+            };
       });
       
       const images = imageToSend ? [imageToSend] : [];
@@ -346,6 +350,13 @@ const ThinkingPartner: React.FC = () => {
       if (autoPlay) handlePlayMessage(botMsg);
     } catch (error) {
       console.error(error);
+      const errorMsg: Message = {
+          id: Date.now().toString(),
+          role: 'model',
+          content: "CRITICAL_ERROR: The neural link was severed. Please check your internet connection or API Key configuration.",
+          timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorMsg]);
     } finally {
       setIsLoading(false);
     }
