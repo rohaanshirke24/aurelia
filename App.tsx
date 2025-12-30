@@ -58,7 +58,7 @@ const FundraisingView = () => (
                     <li className="flex flex-col gap-1">
                          <div className="flex items-center gap-2 text-slate-200">
                             <div className="w-1.5 h-1.5 bg-aurelia-500 rounded-full"></div> 
-                            <strong>Traction: Velocity > Totals</strong>
+                            <strong>Traction: Velocity &gt; Totals</strong>
                         </div>
                          <p className="pl-3.5 text-xs leading-relaxed text-slate-500">
                             Investors value speed. 10% Month-over-Month growth is better than a stagnant 10k users. Show retention cohorts—are users staying?
@@ -70,7 +70,7 @@ const FundraisingView = () => (
                             <strong>Unit Economics: The Machine</strong>
                         </div>
                         <p className="pl-3.5 text-xs leading-relaxed text-slate-500">
-                            Demonstrate LTV/CAC ratio > 3:1. Prove that putting $1 in yields $3 out. If you're pre-revenue, show the theoretical math based on competitor benchmarks.
+                            Demonstrate LTV/CAC ratio &gt; 3:1. Prove that putting $1 in yields $3 out. If you're pre-revenue, show the theoretical math based on competitor benchmarks.
                         </p>
                     </li>
                 </ul>
